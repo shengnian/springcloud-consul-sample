@@ -6,11 +6,11 @@ Built-By: cheng
 Specification-Vendor: org.shengnian
 Specification-Title: mics-person
 Implementation-Vendor: org.shengnian
-SCM-Revision: 
+SCM-Revision: b198b2d6479b3da5babaa0981ac56b665540d5ca
 provider: gradle
 Build-Host: DESKTOP-VR52TLF
-Build-Time: 12:05
+Build-Time: 16:27
 Created-By: 1.8.0_121 (Oracle Corporation 25.121-b13)
 Specification-Version: 0.1.0
-Timestamp: 1494734700122
+Timestamp: 1494750470459
 

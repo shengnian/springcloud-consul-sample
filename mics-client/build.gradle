@@ -25,6 +25,8 @@ jar {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.cloud:spring-cloud-starter-ribbon"
+    compile "org.springframework.cloud:spring-cloud-starter-feign"
     // spring cloud config
     compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
 
