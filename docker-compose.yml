@@ -1,0 +1,143 @@
+version: '3'
+services:
+  springcloud-consul-person:
+    image: shengnianos/springcloud-consul-person
+    container_name: shengnianos-consule-person
+    ports:
+      - 8082:8082
+    networks:
+      sosnet:
+        ipv4_address: 172.19.0.9
+  springcloud-consul-blog:
+    image: shengnianos/springcloud-consul-blog
+    container_name: shengnianos-consule-blog
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://172.19.0.8:3306/sosdocker
+      - SOS_SLEEP=10 # gives time for the database to boot before the application
+    ports:
+      - 8083:8083
+    networks:
+      sosnet:
+        ipv4_address: 172.19.0.10
+    depends_on:
+      - sos-cloud-mariadb
+  springcloud-consule-client:
+    image: shengnianos/springcloud-consul-client
+    container_name: shengnianos-consule-client
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://172.19.0.8:3306/sosdocker
+      - SOS_SLEEP=10 # gives time for the database to boot before the application
+    ports:
+      - 9401:9401
+    networks:
+      sosnet:
+        ipv4_address: 172.19.0.11
+  sos-consul-server:
+    image: consul:latest
+    container_name: sos-consul-server
+    hostname: sos-consul-server
+    entrypoint: /bin/consul
+#    command: "-server -bootstrap-expect 3 -data-dir /data -ui-dir /ui"
+#    command: "agent -server -bootstrap-expect 3 -node=shengnianos-consul1 -ui-dir /ui"
+    command: "agent -server -ui -bind=172.19.0.2 -client=172.19.0.2 -data-dir /data -bootstrap-expect 3"
+    environment:
+      - 'CONSUL_LOCAL_CONFIG={"skip_leave_on_interrupt": true}'
+      - NODE_ID=1
+#      CONSUL_LOCAL_CONFIG:"{\"skip_leave_on_interrupt\": true}"
+#    volumes:
+#      - /data
+#      - /config
+#      - ./src/test/resources/consul_ui:/ui
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+    networks:
+      sosnet:
+        ipv4_address: 172.19.0.2
+  sos-consul-agent1:
+    image: consul:latest
+    container_name: sos-consul-agent1
+    hostname: sos-consul-agent1
+#    command: "agent -server -join shengnianos-consul1"
+    command: "agent -server -join 172.19.0.2 -client=172.19.0.3 -data-dir /data -disable-host-node-id=true"
+    entrypoint:
+      - /bin/consul
+#      - consul
+#      - agent
+#      - -server
+#      - -join=172.19.0.2
+#      - -client=172.19.0.3
+#      - -data-dir=/data
+#      - -node-id=$(uuidgen | awk '{print tolower($0)}')
+#      - -data-dir=/tmp/consuldata
+#      - -bind={{ GetInterfaceIP "eth0" }}
+#      - -client=0.0.0.0
+#      - -retry-join=seed:8301
+#      - -ui
+    environment:
+      - 'CONSUL_LOCAL_CONFIG={"skip_leave_on_interrupt": true}'
+      - NODE_ID=2
+    depends_on:
+      - sos-consul-server
+    expose:
+      - "8400"
+      - "8500"
+      - "8600"
+    networks:
+      sosnet:
+        ipv4_address: 172.19.0.3
+
+  sos-consul-agent2:
+    image: consul:latest
+    container_name: sos-consul-agent2
+    hostname: sos-consul-agent2
+    command: "agent -server -join 172.19.0.2 -client=172.19.0.4 -data-dir /data -disable-host-node-id=true"
+    entrypoint:
+      - /bin/consul
+#      - consul
+#      - agent
+#      - -server
+#      - -join=172.19.0.2
+#      - -client=172.19.0.4
+#      - -data-dir=/data
+#      - -node-id=$(uuidgen | awk '{print tolower($0)}')
+    environment:
+      - 'CONSUL_LOCAL_CONFIG={"skip_leave_on_interrupt": true}'
+      - NODE_ID=3
+    depends_on:
+      - sos-consul-server
+    expose:
+      - "8400"
+      - "8500"
+      - "8600"
+    networks:
+      sosnet:
+        ipv4_address: 172.19.0.4
+
+  sos-cloud-mariadb:
+    container_name: sos-cloud-mariadb
+    image: mariadb:10.1.23
+    # volumes:
+    #     - ~/volumes/mysql/:/var/lib/mysql/
+    environment:
+       - MYSQL_USER=root
+       - MYSQL_ROOT_PASSWORD=root
+       - MYSQL_DATABASE=sosdocker
+       - MYSQL_CHARSET=utf8
+    ports:
+       - 3308:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character-set-server=utf8 --collation=utf8_general_ci --init-connect='SET NAMES UTF8' --innodb-flush-log-at-trx-commit=0
+    networks:
+      sosnet:
+        ipv4_address: 172.19.0.8
+
+networks:
+  sosnet:
+    driver: bridge
+    ipam:
+#      driver: default
+      config:
+        - subnet: 172.19.0.0/16
+#        gateway: 172.19.0.1

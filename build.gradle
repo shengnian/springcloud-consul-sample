@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url 'http://repo2.maven.org/maven2' }
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
+        classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.2.RELEASE"
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        maven { url 'http://repo2.maven.org/maven2' }
+        maven { url 'http://repo.spring.io/milestone' }
+        maven { url 'http://repo.spring.io/snapshot' }
+    }
+}
+
+subprojects { pro ->
+
+    group 'shengnianos'
+    version '0.1.0'
+
+    apply plugin: 'java'
+    sourceCompatibility=1.8
+    targetCompatibility=1.8
+
+    apply plugin: 'idea'
+    // publish jar to server
+    apply plugin: 'maven'
+    // loading utils
+    apply from: "$rootProject.rootDir/gradle/utils.gradle"
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    ext.jarTree = fileTree(dir: 'libs', include: '**/*.jar')
+    ext.rootProjectLibs = new File(rootProject.rootDir, 'libs').getAbsolutePath()
+    ext.jarTree += fileTree(dir: rootProjectLibs, include: '**/*.jar')
+}
+

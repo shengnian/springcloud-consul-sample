@@ -1,0 +1,32 @@
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'propdeps'
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:' + spring_cloud_stream_version
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
+    }
+}
+
+apply from: "gradle/docker.gradle"
+
+jar {
+    baseName = "springcloud-consul-client"
+    version = "0.1.0"
+    doFirst {
+        manifest = defaultManifest([
+                project : project,
+                projectVendor : 'org.shengnian'
+        ])
+    }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    // spring cloud config
+    compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}

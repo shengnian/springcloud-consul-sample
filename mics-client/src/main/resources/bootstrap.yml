@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: shengnianos-consul-client
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      config:
+        watch:
+          enabled: true
+          format: YAML

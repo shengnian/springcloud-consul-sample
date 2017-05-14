@@ -1,0 +1,5 @@
+rootProject.name = 'springcloud-sample'
+include 'mics-person'
+include 'mics-blog'
+include 'mics-client'
+

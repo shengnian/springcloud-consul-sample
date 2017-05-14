@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Implementation-Title: mics-client
+Build-Date: 2017-05-14
+Implementation-Version: 0.1.0
+Built-By: cheng
+Specification-Vendor: org.shengnian
+Specification-Title: mics-client
+Implementation-Vendor: org.shengnian
+SCM-Revision: 
+provider: gradle
+Build-Host: DESKTOP-VR52TLF
+Build-Time: 12:04
+Created-By: 1.8.0_121 (Oracle Corporation 25.121-b13)
+Specification-Version: 0.1.0
+Timestamp: 1494734698983
+

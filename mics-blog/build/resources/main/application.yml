@@ -1,0 +1,24 @@
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  cloud:
+    consul:
+      discovery:
+        hostname: shengnianos-consule-blog
+        healthCheckPath: /health
+        healthCheckInterval: 15s
+        instanceId: shengnianos-consul-blog
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: none
+  datasource:
+    platform: mysql
+    url: jdbc:mariadb://sos-cloud-mariadb:3306/sosdocker
+    username: root
+    password: root
+    driver-class-name: org.mariadb.jdbc.Driver
+    initialize: true
+server:
+    port: 8083

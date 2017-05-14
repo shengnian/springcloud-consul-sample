@@ -1,0 +1,10 @@
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  cloud:
+    consul:
+      discovery:
+        register: false
+server:
+    port: 9401

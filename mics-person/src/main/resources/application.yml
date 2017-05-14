@@ -1,0 +1,13 @@
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  cloud:
+    consul:
+      discovery:
+        hostname: shengnianos-consule-person
+        healthCheckPath: /health
+        healthCheckInterval: 15s
+        instanceId: shengnianos-consul-person
+server:
+    port: 8082

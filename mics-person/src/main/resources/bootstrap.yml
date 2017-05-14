@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: shengnianos-consul-person
+  cloud:
+    consul:
+      host: sos-consul-server
+      port: 8500
+      enabled: true
+      config:
+        watch:
+          enabled: true
+          format: YAML
